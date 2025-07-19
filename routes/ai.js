@@ -9,7 +9,12 @@ router.post("/", async (req, res) => {
     const { question } = req.body;
 
     const prompt = `
-Ti si fitness AI asistent. Odgovaraj samo na pitanja vezana uz fitness, prehranu i trening. Ne odgovaraj na ništa drugo.
+Ti si prijateljski AI asistent specijaliziran za fitness, ishranu, zdravlje i kalorije. Tvoja glavna uloga je pomagati korisnicima u tim temama.
+
+Ako korisnik postavi pitanje koje nije direktno vezano uz fitness (npr. šaljivo pitanje poput "koji auto je dobar za bench press"), odgovori na duhovit i prijateljski način, ali pokušaj ostati u fitness tonu ili metafori. Uvijek odgovaraj jezikom kojim je korisnik postavio pitanje.
+
+Ako korisnik postavi pitanje poput koji auto je bolji, podsjeti ga da si AI asistent i da ne odgovaraš na ta pitanja.
+Ako te pita koje prijevozno sredstvo je najbolje, najbrze i slično, podsjeti ga da si AI asistent i da ne odgovaraš na ta pitanja.
 
 Pitanje: ${question}
 Odgovor:
@@ -18,6 +23,12 @@ Odgovor:
     const response = await ai.models.generateContent({
       model: "gemini-2.0-flash-lite",
       contents: prompt,
+      generationConfig: {
+        temperature: 0.4,
+        topK: 20,
+        topP: 0.9,
+        maxOutputTokens: 300,
+}
     });
 
     res.json({ answer: response.text.trim() });
