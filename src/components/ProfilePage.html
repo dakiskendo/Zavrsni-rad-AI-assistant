@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="hr">
+    <head>
+        <meta charset="UTF-8">
+        <title>Profil korisnika</title>
+        <link rel="stylesheet" href="/css/profilepage.css">
+    </head>
+    <body>
+        <h1>Uredi profil</h1>
+        <form id="profileForm">
+            <label>Ime: <input type="text" name="name" /></label><br>
+            <label>Spol: 
+                <select name="gender">
+                    <option value="male">Muški</option>
+                    <option value="female">Ženski</option>
+                </select>
+            </label><br>
+            <label>Težina (kg): <input type="number" name="weight" /></label><br>
+            <label>Cilj: <input type="text" name="goal" /></label><br>
+            <button type="submit">Spremi</button>
+        </form>
+        <script>
+            const userId = "1";
+
+            fetch(`/api/users/${userId}`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data) {
+                        document.querySelector('input[name="name"]').value;
+                        document.querySelector('select[name="gender"]').value;
+                        document.querySelector('input[name="weight"]').value;
+                        document.querySelector('input[name="goal"]').value;
+                    }
+                })
+                .catch(err => {
+                    console.error("Greška pri učitavanju profila:", err);
+                });
+
+            document.getElementById('profileForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                const userData= {
+                    id: userId,
+                    name: document.querySelector('input[name="name"]').value,
+                    gender: document.querySelector('input[name="gender"]').value,
+                    weight: document.querySelector('input[name="weight"]').value,
+                    goal: document.querySelector('input[name="goal"]').value,
+                };
+
+                fetch(`/api/users/${userId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type' : 'application/json'
+                    },
+                    body: JSON.stringify(userData)
+                })
+                .then(res => res.json())
+                .then(response => {
+                    alert("Profil spremljen!");
+                })
+                .catch(err => {
+                    console.error("Greška pri spremanju profila:", err);
+                });
+
+            });
+        </script>
+    </body>
+</html>

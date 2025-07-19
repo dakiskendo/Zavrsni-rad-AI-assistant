@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="hr">
+    <head>
+        <meta charset="UTF-8">
+        <title>Fitness AI Asistent</title>
+        <link rel="stylesheet" href="/css/mainpage.css">
+    </head>
+    <body>
+        <div class="container">
+            <h1>Dobrodošao u Fitness AI Asistenta.</h1>
+
+            <div class="chat-box">
+                <div id="chatMessages" class="chat-messages"></div>
+
+                <textarea id="questionInput" placeholder="Postavi pitanje AI asistentu..."></textarea>
+                <button id="sendButton">Pošalji</button>
+            </div>
+        </div>
+
+        <script>
+            const userId="1";
+
+            document.getElementById("sendButton").addEventListener("click", async () => {
+                const question = document.getElementById("questionInput").value.trim();
+                if(!question) return;
+
+                const chatMessages = document.getElementById("chatMessages");
+                chatMessages.innerHTML += `<div class="message uiser"><strong>Ti:</strong> ${question}</div>`;
+                document.getElementById("questionInput").value = "";
+
+                try{
+                    const userRes = await fetch(`/api/users/${userId}`);
+                    const userData = await userRes.json();
+
+                const aiRes = await fetch(`/api/ai-chat`, {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify({userData, question})
+                });
+
+                const aiData = await aiRes.json();
+                chatMessages.innerHTML += `<div class="message ai"><strong>Assistant:</strong> ${aiData.answer}</div>`;
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                } catch (err) {
+                    chatMessages.innerHTML += `<div class="message error">Greška pri komunikaciji s asistentom.</div>`;
+                    console.error("AI greška:", err);
+                }
+            });
+        </script>
+    </body>
+</html>
