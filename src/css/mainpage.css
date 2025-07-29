@@ -19,37 +19,70 @@ h1{
     margin-bottom: 30px;
 }
 
-.chat-box{
-    display:flex;
+.chat-box {
+    display: flex;
     flex-direction: column;
+    gap: 10px;
 }
 
-.chat-messages{
-    max-height:300px;
-    overflow-y:auto;
+.input-area {
+    display: flex;
+    flex-direction: column; /* tekstualno polje i gumb jedno ispod drugog */
+    gap: 10px;
+}
+
+.input-area textarea {
+    width: 100%; /* zauzima punu širinu */
+    box-sizing: border-box; /* da padding ne proširuje element */
+}
+
+.input-area button {
+    width: 50%;
+    align-self: center;
+}
+
+.chat-messages {
+    max-height: 300px;
+    overflow-y: auto;
     border: 1px solid #ccc;
     padding: 15px;
     border-radius: 5px;
     margin-bottom: 15px;
     background-color: #fdfdfd;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 .message {
-    margin-bottom:10px;
+    max-width: 70%;
+    padding: 10px 15px;
+    border-radius: 15px;
+    word-wrap: break-word;
+    display: inline-block;
 }
 
-.message.user{
-    text-align:right;
+/* Korisnik desno */
+.message.user {
+    background-color: #007bff;
+    color: white;
+    align-self: flex-end; /* guraj desno */
+    text-align: left;
 }
 
-.message.ai{
-    text-align:left;
+/* AI lijevo */
+.message.ai {
+    background-color: #e1ecf9;
     color: #333;
+    align-self: flex-start; /* guraj lijevo */
+    text-align: left;
 }
 
+/* Greške u crvenom */
 .message.error {
-    color:red;
-    font-weight:bold;
+    color: red;
+    font-weight: bold;
+    align-self: center; /* centriraj */
 }
 
 textarea{
@@ -74,4 +107,33 @@ button{
 
 button:hover{
     background-color: #0055aa;
+}
+
+.menu {
+    background-color: #0066cc;
+    padding: 10px 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.menu ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 20px;
+}
+
+.menu li {
+    display: inline;
+}
+
+.menu a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.menu a:hover {
+    text-decoration: underline;
 }

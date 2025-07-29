@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="hr">
+    <head>
+        <meta charset="UTF-8">
+        <title>Prijava</title>
+        <link rel="stylesheet" href="/css/loginpage.css">
+    </head>
+    <body>
+        <h1>Prijavite se!</h1>
+            <form id="loginform">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required />
+                <label for="password">Lozinka:</label>
+                <input type="password" id="password" name="password" required />
+                <button type="submit">Prijavi se</button>
+            </form>
+        <h2>Nemate račun? <a href="/register">Registrirajte se!</a></h2>
+        <script>
+            document.getElementById("loginform").addEventListener("submit", async function(e){
+                e.preventDefault();
+
+                const email = document.getElementById("email").value;
+                const password = document.getElementById("password").value;
+
+                const response = await fetch("/api/users/login", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify( {email, password })
+                });
+
+
+                const res = await response.json();
+                if (response.ok && res.userId) {
+                    localStorage.setItem("userId", res.userId);
+                    alert("Prijava uspješna!");
+                    window.location.href = `/main?userId=${res.userId}`;
+                } else {
+                    alert(res.message || "Greška prilikom prijave.");
+                }
+                
+                
+            });
+        </script>
+    </body>
+</html>

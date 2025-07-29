@@ -8,28 +8,98 @@
     <body>
         <h1>Uredi profil</h1>
         <form id="profileForm">
-            <label>Ime: <input type="text" name="name" /></label><br>
-            <label>Spol: 
-                <select name="gender">
-                    <option value="male">Muški</option>
-                    <option value="female">Ženski</option>
-                </select>
-            </label><br>
-            <label>Težina (kg): <input type="number" name="weight" /></label><br>
-            <label>Cilj: <input type="text" name="goal" /></label><br>
+            <label for="name">Ime:</label>
+            <input type="text" id="name" name="name" required />
+
+            <label for="gender">Spol:</label>
+            <select id="gender" name="gender" required>
+                <option value="">Odaberi spol</option>
+                <option value="male">Muški</option>
+                <option value="female">Ženski</option>
+            </select>
+
+            <label for="age">Dob:</label>
+            <input type="number" id="age" name="age" required />
+
+            <label for="height">Visina (cm):</label>
+            <select id="height" name="height" required>
+                <option value=""> Odaberite visinu </option>
+                <script>
+                    for(let i = 100; i<= 250; i++){
+                        document.write(`<option value="${i}">${i} cm</option>`);
+                    }
+                </script>
+            </select>
+
+            <label for="weight">Težina (kg):</label>
+            <select id="weight" name="weight" required>
+                <option value=""> Odaberite težinu </option>
+                <script>
+                    for(let i = 40; i<= 300; i++){
+                        document.write(`<option value="${i}">${i} kg</option>`);
+                    }
+                </script>
+            </select>
+
+            <p id="activityDisclaimer">Ovdje odaberite svoju razinu aktivnosti.</p>
+            <p>Bez aktivnosti - Sjedilački stil života. Nema strukturirane fizičke aktivnosti. Uglavnom sjedenje, manje od 3000 koraka dnevno.</p>
+            <p>Niska razina aktivnosti - Povremeno kretanje kroz dan (3000 do 5000 koraka), bez vježbanja ili vrlo rijetko.</p>
+            <p>Umjerena razina aktivnosti - Uključuje 1 do 3 treninga tjedno i prosječno kretanje (5000 do 10,000 koraka dnevno).</p>
+            <p>Visoka razina aktivnosti - Redovita fizička aktivnost (4+ treninga tjedno) i/ili preko 10,000 koraka dnevno.</p>
+            <p>Ekstremna razina aktivnosti - Vrlo intenzivan fizički rad ili treninzi 2x dnevno. Velika količina kretanja i napora svakodnevno.</p>
+
+            <label for="activityLevel">Razina aktivnosti:</label>
+            <select id="activityLevel" name="activityLevel">
+                <option value=""> Odaberi razinu aktivnosti </option>
+                <option value="1.2"> Bez aktivnosti </option>
+                <option value="1.375"> Niska razina aktivnosti </option>
+                <option value="1.55"> Umjerena razina aktivnosti </option>
+                <option value="1.725"> Visoka razina aktivnosti </option>
+                <option value="1.9"> Ekstremna razina aktivnosti </option>
+            </select>
+
+            <label for="medicalConditions" id="medicalLabel">Ovdje možete navesti svoja medicinska stanja, dijagnoze ili tjelesna ograničenja.</label>
+            <textArea id="medicalConditions" name="medicalConditions" placeholder="Bolujem od..."></textArea>
             <button type="submit">Spremi</button>
         </form>
         <script>
-            const userId = "1";
+            function getUserIdFromURL() {
+                const params = new URLSearchParams(window.location.search);
+                return params.get("userId");
+            }
+
+            const userId = getUserIdFromURL();
+            if(!userId) {
+                alert("Nedostaje userId. Prijavite se opet.");
+                window.location.href = "/";
+            }
+
+            let userData = {};
+
+            function mapGenderToValue(genderText) {
+                if (!genderText) return "";
+                genderText = genderText.toLowerCase();
+                if (genderText === "muški" || genderText === "male") return "male";
+                if (genderText === "ženski" || genderText === "female") return "female";
+                return "";
+            }
+
 
             fetch(`/api/users/${userId}`)
                 .then(res => res.json())
                 .then(data => {
                     if (data) {
-                        document.querySelector('input[name="name"]').value;
-                        document.querySelector('select[name="gender"]').value;
-                        document.querySelector('input[name="weight"]').value;
-                        document.querySelector('input[name="goal"]').value;
+                        console.log("Primljeni podaci:", data); // Dodaj ovo!
+                        document.querySelector('input[name="name"]').value = data.name;
+                        const genderValue = mapGenderToValue(data.gender);
+                        document.querySelector('select[name="gender"]').value = genderValue;
+                        document.querySelector('input[name="age"]').value = data.age;
+                        document.querySelector('select[name="height"]').value = Math.round(data.height);
+                        document.querySelector('select[name="weight"]').value = Math.round(data.weight);
+                        document.querySelector('select[name="activityLevel"]').value = data.activityLevel;
+                        document.querySelector('textarea[name="medicalConditions"]').value = data.medicalConditions || "";
+                        data.basalMetabolicRate = 10*data.weight + 6.25*data.height - 5*data.age + 5;
+                        data.caloricIntake = data.basalMetabolicRate * data.activityLevel;
                     }
                 })
                 .catch(err => {
@@ -39,13 +109,14 @@
             document.getElementById('profileForm').addEventListener('submit', function(e) {
                 e.preventDefault();
 
-                const userData= {
-                    id: userId,
-                    name: document.querySelector('input[name="name"]').value,
-                    gender: document.querySelector('input[name="gender"]').value,
-                    weight: document.querySelector('input[name="weight"]').value,
-                    goal: document.querySelector('input[name="goal"]').value,
-                };
+                userData.id = userId;
+                userData.name = document.querySelector('input[name="name"]').value;
+                userData.gender = document.querySelector('select[name="gender"]').value;
+                userData.age = parseInt(document.querySelector('input[name="age"]').value);
+                userData.height = parseInt(document.querySelector('select[name="height"]').value);
+                userData.weight = parseInt(document.querySelector('select[name="weight"]').value);
+                userData.activityLevel = parseFloat(document.querySelector('select[name="activityLevel"]').value);
+                userData.medicalConditions = document.querySelector('textarea[name="medicalConditions"]').value;
 
                 fetch(`/api/users/${userId}`, {
                     method: 'POST',
@@ -56,7 +127,8 @@
                 })
                 .then(res => res.json())
                 .then(response => {
-                    alert("Profil spremljen!");
+                    alert("Profil spremljen! Vraćamo te na glavnu stranicu.");
+                    window.location.href = `/main?userId=${userId}`;
                 })
                 .catch(err => {
                     console.error("Greška pri spremanju profila:", err);

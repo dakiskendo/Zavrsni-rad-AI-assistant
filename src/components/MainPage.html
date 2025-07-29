@@ -6,40 +6,67 @@
         <link rel="stylesheet" href="/css/mainpage.css">
     </head>
     <body>
+        <nav class="menu">
+            <ul>
+                <li><a id="profileLink" href="#">Uredi profil</a></li>
+                <li><a id="routinesLink" href="#">Rutine</a></li>
+                <li><a href="/">Odjava</a></li>
+            </ul>
+        </nav>
+
         <div class="container">
             <h1>Dobrodošao u Fitness AI Asistenta.</h1>
 
             <div class="chat-box">
                 <div id="chatMessages" class="chat-messages"></div>
 
-                <textarea id="questionInput" placeholder="Postavi pitanje AI asistentu..."></textarea>
-                <button id="sendButton">Pošalji</button>
+                <div class="input-area">
+                    <textarea id="questionInput" placeholder="Postavi pitanje AI asistentu..."></textarea>
+                    <button id="sendButton">Pošalji</button>
+                </div>
             </div>
         </div>
 
         <script>
-            const userId="1";
+            function getUserIdFromURL() {
+                const params = new URLSearchParams(window.location.search);
+                return params.get("userId");
+            }
+
+            const userId = getUserIdFromURL();
+
+            if (!userId) {
+                alert("Nedostaje userId! Prijavite se ponovno.");
+                window.location.href = "/";
+            }
+
+            const profileLink = document.getElementById("profileLink");
+            profileLink.href = `/profile?userId=${userId}`;
+
+            document.getElementById("routinesLink").href = `/routines?userId=${userId}`;
 
             document.getElementById("sendButton").addEventListener("click", async () => {
                 const question = document.getElementById("questionInput").value.trim();
                 if(!question) return;
 
                 const chatMessages = document.getElementById("chatMessages");
-                chatMessages.innerHTML += `<div class="message uiser"><strong>Ti:</strong> ${question}</div>`;
-                document.getElementById("questionInput").value = "";
 
                 try{
                     const userRes = await fetch(`/api/users/${userId}`);
                     const userData = await userRes.json();
 
-                const aiRes = await fetch(`/api/ai-chat`, {
+                    const userName = userData.name || "Ti";
+
+                    chatMessages.innerHTML += `<div class="message user"><strong>${userName}:</strong> ${question}</div>`;
+                    document.getElementById("questionInput").value = "";
+                    const aiRes = await fetch(`/api/ai-chat`, {
                     method: "POST",
                     headers: {"Content-Type": "application/json"},
                     body: JSON.stringify({userData, question})
                 });
 
                 const aiData = await aiRes.json();
-                chatMessages.innerHTML += `<div class="message ai"><strong>Assistant:</strong> ${aiData.answer}</div>`;
+                chatMessages.innerHTML += `<div class="message ai"><strong>Arnold AI:</strong> ${aiData.answer}</div>`;
                 chatMessages.scrollTop = chatMessages.scrollHeight;
                 } catch (err) {
                     chatMessages.innerHTML += `<div class="message error">Greška pri komunikaciji s asistentom.</div>`;

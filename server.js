@@ -15,12 +15,24 @@ app.use('/components', express.static(path.join(__dirname, 'src/components')));
 
 
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'src/components/MainPage.html'));
+    res.sendFile(path.join(__dirname, 'src/components/LoginPage.html'));
 
+});
+
+app.get('/register', (req, res) => {
+    res.sendFile(path.join(__dirname, 'src/components/RegisterPage.html'));
+});
+
+app.get('/main', (req, res) => {
+    res.sendFile(path.join(__dirname, 'src/components/MainPage.html'));
 });
 
 app.get('/profile', (req, res) => {
     res.sendFile(path.join(__dirname, 'src/components/ProfilePage.html'));
+});
+
+app.get('/routines', (req, res) => {
+    res.sendFile(path.join(__dirname, 'src/components/RoutinesPage.html'));
 });
 
 const usersRoutes = require('./routes/users');
