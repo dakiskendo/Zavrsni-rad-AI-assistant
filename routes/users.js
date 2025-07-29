@@ -32,6 +32,20 @@ router.get('/:id', (req, res) => {
   });
 });
 
+router.get('/userdata', (req, res) => {
+  // Ovdje trebaš napraviti stvarnu logiku dohvaćanja ulogiranog korisnika
+  // Ja ću za primjer uzeti prvi user iz users.json:
+  const user = users[0]; 
+
+  // Pretpostavimo da user objekt ima polja: height, weight, age, calories
+  res.json({
+    height: user.height,
+    weight: user.weight,
+    age: user.age,
+    calories: user.dailyCalories,
+  });
+});
+
 router.post('/login', (req, res) => {
     const { email, password } = req.body;
 

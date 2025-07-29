@@ -13,6 +13,7 @@ app.use('/css', express.static(path.join(__dirname, 'src/css')));
 
 app.use('/components', express.static(path.join(__dirname, 'src/components')));
 
+app.use('/img', express.static(path.join(__dirname, 'src/components/img')));
 
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'src/components/LoginPage.html'));
@@ -34,6 +35,12 @@ app.get('/profile', (req, res) => {
 app.get('/routines', (req, res) => {
     res.sendFile(path.join(__dirname, 'src/components/RoutinesPage.html'));
 });
+
+app.get('/logout', (req, res) => {
+  res.clearCookie('sessionId'); 
+  res.redirect('/');
+});
+
 
 const usersRoutes = require('./routes/users');
 const aiRoutes = require('./routes/ai');

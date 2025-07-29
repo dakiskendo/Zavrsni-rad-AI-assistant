@@ -54,5 +54,19 @@
     "medicalConditions": "Švarcenegerova bolest",
     "basalMetabolicRate": 2212.5,
     "caloricIntake": 4203.75
+  },
+  {
+    "id": 1753822612594,
+    "name": "Davor",
+    "email": "dakiskendo@gmail.com",
+    "password": "123123",
+    "gender": "male",
+    "age": "23",
+    "height": "192",
+    "weight": "100",
+    "activityLevel": "1.55",
+    "medicalConditions": "Hašimotov sindrom",
+    "basalMetabolicRate": 2090,
+    "caloricIntake": 3239.5
   }
 ]
