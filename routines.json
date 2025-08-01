@@ -3,34 +3,103 @@
     "userId": "1753809430605",
     "routines": [
       {
-        "id": 1754053767675,
+        "id": 1754080175997,
         "name": "Push day",
         "exercises": [
           {
-            "exercise": "Deadlift",
-            "weight": 50,
-            "reps": 11
+            "exercise": "Bench Press",
+            "weight": 150,
+            "reps": 2,
+            "sets": 3
           },
+          {
+            "exercise": "Incline bench press",
+            "weight": 155,
+            "reps": 3,
+            "sets": 3
+          },
+          {
+            "exercise": "Cable chest fly",
+            "weight": 60,
+            "reps": 5,
+            "sets": 2
+          },
+          {
+            "exercise": "Triceps pushdowns",
+            "weight": 120,
+            "reps": 12,
+            "sets": 4
+          },
+          {
+            "exercise": "Overhead triceps extensions",
+            "weight": 100,
+            "reps": 12,
+            "sets": 4
+          },
+          {
+            "exercise": "Cable lateral raises",
+            "weight": 15,
+            "reps": 12,
+            "sets": 2
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "userId": "1754085285609",
+    "routines": [
+      {
+        "id": 1754085335379,
+        "name": "Push",
+        "exercises": [
           {
             "exercise": "Bench Press",
-            "weight": 100,
-            "reps": 5
+            "weight": 160,
+            "reps": 5,
+            "sets": 3
           },
           {
-            "exercise": "Squat",
+            "exercise": "Smith Machine Incline Bench Press",
+            "weight": 140,
+            "reps": 5,
+            "sets": 3
+          },
+          {
+            "exercise": "Machine Chest Fly",
+            "weight": 160,
+            "reps": 4,
+            "sets": 3
+          },
+          {
+            "exercise": "Triceps Pushdowns",
+            "weight": 120,
+            "reps": 6,
+            "sets": 3
+          },
+          {
+            "exercise": "Single Arm Triceps Pushdowns",
             "weight": 100,
-            "reps": 5
+            "reps": 12,
+            "sets": 4
           }
         ]
       },
       {
-        "id": 1754059599635,
-        "name": "Pull day",
+        "id": 1754085425528,
+        "name": "Pull",
         "exercises": [
           {
-            "exercise": "Bench Press",
-            "weight": 55,
-            "reps": 11
+            "exercise": "Pull-Ups",
+            "weight": 104,
+            "reps": 10,
+            "sets": 4
+          },
+          {
+            "exercise": "Cable Lat Pulldowns",
+            "weight": 100,
+            "reps": 12,
+            "sets": 3
           }
         ]
       }

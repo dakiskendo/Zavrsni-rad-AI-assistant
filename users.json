@@ -12,5 +12,19 @@
     "medicalConditions": "Hipotiroza štitnjače",
     "basalMetabolicRate": 2130,
     "caloricIntake": 3301.5
+  },
+  {
+    "id": 1754085285609,
+    "name": "Marko",
+    "email": "marko@gmail.com",
+    "password": "123",
+    "gender": "male",
+    "age": "23",
+    "height": "167",
+    "weight": "100",
+    "activityLevel": "1.55",
+    "medicalConditions": "Bolest gušterače",
+    "basalMetabolicRate": 1933.75,
+    "caloricIntake": 2997.3125
   }
 ]

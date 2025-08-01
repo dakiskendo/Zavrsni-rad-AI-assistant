@@ -240,7 +240,11 @@ router.post('/:id/routines', (req, res) => {
 router.post('/:id/routines/:routineId/add-exercise', (req, res) => {
     const userId = req.params.id;
     const routineId = req.params.routineId;
-    const newExercise = req.body;
+    const { exercise, weight, reps, sets } = req.body;
+
+    if (!exercise || weight === undefined || reps === undefined || sets === undefined) {
+        return res.status(400).json({ error: 'Nedostaju obavezni podaci (vježba, težina, ponavljanja, setovi).' });
+    }
 
     fs.readFile(routinesPath, 'utf8', (err, data) => {
         if (err) return res.status(500).json({ error: 'Greška pri čitanju rutina.' });
@@ -261,13 +265,20 @@ router.post('/:id/routines/:routineId/add-exercise', (req, res) => {
             routine.exercises = [];
         }
 
-        routine.exercises.push(newExercise);
+        const newExerciseObject = {
+          exercise,
+          weight,
+          reps,
+          sets
+        };
+
+        routine.exercises.push(newExerciseObject);
 
         fs.writeFile(routinesPath, JSON.stringify(allRoutines, null, 2), (err) => {
-            if (err) return res.status(500).json({ error: 'Greška pri spremanju vježbe.' });
-            res.json({ message: 'Vježba dodana u rutinu.' });
+            if (err) return res.status(500).json({ error: 'Greška pri spremanju vježbe.' });
+            res.json({ message: 'Vježba dodana u rutinu.' });
         });
-    });
+    });
 });
 
 router.get('/exercises', (req, res) => {
@@ -284,6 +295,44 @@ router.get('/exercises', (req, res) => {
       res.status(500).json({ message: "Greška pri parsiranju podataka." });
     }
   });
+});
+
+router.put('/:id/routines/:routineId', (req, res) => {
+    const userId = req.params.id;
+    const routineId = req.params.routineId;
+    const { exercises } = req.body;
+
+    if (!exercises || !Array.isArray(exercises)) {
+        return res.status(400).json({ error: 'Neispravan format podataka. Potreban je niz vježbi.' });
+    }
+
+    fs.readFile(routinesPath, 'utf8', (err, data) => {
+        if (err) return res.status(500).json({ error: 'Greška pri čitanju rutina.' });
+
+        let allRoutines = [];
+        try {
+            allRoutines = JSON.parse(data);
+        } catch {
+            return res.status(500).json({ error: 'Greška pri parsiranju rutina.' });
+        }
+
+        const userIndex = allRoutines.findIndex(u => String(u.userId) === String(userId));
+        if (userIndex === -1) {
+            return res.status(404).json({ error: 'Korisnik nije pronađen.' });
+        }
+
+        const routineIndex = allRoutines[userIndex].routines.findIndex(r => String(r.id) === String(routineId));
+        if (routineIndex === -1) {
+            return res.status(404).json({ error: 'Rutina nije pronađena.' });
+        }
+
+        allRoutines[userIndex].routines[routineIndex].exercises = exercises;
+
+        fs.writeFile(routinesPath, JSON.stringify(allRoutines, null, 2), (writeErr) => {
+            if (writeErr) return res.status(500).json({ error: 'Greška pri spremanju ažurirane rutine.' });
+            res.json({ message: 'Rutina uspješno ažurirana!' });
+        });
+    });
 });
 
 module.exports = router;

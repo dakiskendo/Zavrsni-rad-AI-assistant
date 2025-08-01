@@ -103,6 +103,9 @@
                     <label for="exerciseWeight">Kilogrami:</label>
                     <input type="number" id="exerciseWeight" name="exerciseWeight" required min="0" />
 
+                    <label for="sets">Broj setova:</label>
+                    <input type="number" id="sets" name="sets" required min="1"/>
+
                     <label for="reps">Broj ponavljanja:</label>
                     <input type="number" id="reps" name="reps" required min="1" />
 
@@ -210,11 +213,13 @@
                 const exercise = document.getElementById("exerciseName").value;
                 const weight = parseInt(document.getElementById("exerciseWeight").value);
                 const reps = parseInt(document.getElementById("reps").value);
+                const sets = parseInt(document.getElementById("sets").value);
 
                 const newRoutine = {
                     exercise,
                     weight,
-                    reps
+                    reps,
+                    sets
                 };
 
                 try {
@@ -253,7 +258,7 @@
                         alert("Nova rutina stvorena!");
                         loadUserRoutines();
                         document.getElementById("newRoutineNamePopup").style.display = "none";
-                        document.getElementById("newRoutine").reset(); // Ažurirano
+                        document.getElementById("newRoutine").reset();
                     } else {
                         throw new Error("Greška prilikom stvaranja rutine");
                     }
@@ -297,6 +302,7 @@
                             thead.innerHTML = `
                                 <tr>
                                     <th>Vježba</th>
+                                    <th>Setovi</th>
                                     <th>Težina</th>
                                     <th>Ponavljanja</th>
                                 </tr>
@@ -304,17 +310,27 @@
                             table.appendChild(thead);
 
                             const tbody = document.createElement("tbody");
-                            routine.exercises.forEach(exercise => {
-                                const row = document.createElement("tr");
-                                row.innerHTML = `
-                                    <td>${exercise.exercise}</td>
-                                    <td>${exercise.weight} kg</td>
-                                    <td>${exercise.reps}</td>
-                                `;
-                                tbody.appendChild(row);
-                            });
-                            table.appendChild(tbody);
-                            exercisesList.appendChild(table);
+                                routine.exercises.forEach(exercise => {
+                                    if (!exercise || (!exercise.exercise && typeof exercise.exercise !== 'string')) {
+                                        console.warn("Pronađen neispravan objekt vježbe. Preskače se.");
+                                        return;
+                                    }
+
+                                    const exerciseName = (typeof exercise.exercise === 'object' && exercise.exercise.name)
+                                        ? exercise.exercise.name
+                                        : exercise.exercise;
+                                    
+                                    const row = document.createElement("tr");
+                                    row.innerHTML = `
+                                        <td>${exerciseName}</td>
+                                        <td>${exercise.sets}</td>
+                                        <td>${exercise.weight} kg</td>
+                                        <td>${exercise.reps}</td>
+                                    `;
+                                    tbody.appendChild(row);
+                                });
+                                table.appendChild(tbody);
+                                exercisesList.appendChild(table);
                         } else {
                             exercisesList.innerHTML = "<p>Nema dodanih vježbi.</p>";
                         }

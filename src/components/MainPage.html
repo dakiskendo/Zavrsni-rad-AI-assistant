@@ -10,7 +10,6 @@
             <div class="menu-left" id="userDisplay"></div>
             <ul>
                 <li><a id="profileLink" href="#">Uredi profil</a></li>
-                <li><a id="routinesLink" href="#">Rutine</a></li>
                 <li><a id="logoutLink" href="#">Odjava</a></li>
             </ul>
         </nav>
@@ -21,7 +20,6 @@
 
         <div class="container">
             <h1 id="welcome-message">Dobrodošao u Fitness AI Asistenta.</h1>
-
             <div class="chat-box">
                 <div id="chatMessages" class="chat-messages"></div>
 
@@ -33,8 +31,55 @@
         </div>
 
         <div class="routines-container">
-            <div class="training-box">
+            <h2>Rutine</h2>
+            <div id="main-routines-list">
+                <p>Učitavanje rutina...</p>
+            </div>
 
+            <div id="routine-details-container" class="training-box" style="display: none;">
+                <h3 id="routine-details-name"></h3>
+                <div id="routine-exercises-list">
+                    <table class="exercise-table">
+                        <thead>
+                            <tr>
+                                <th>Vježba</th>
+                                <th>Setovi</th>
+                                <th>Težina</th>
+                                <th>Ponavljanja</th>
+                            </tr>
+                        </thead>
+                        <tbody id="routine-exercises-body">
+                            </tbody>
+                    </table>
+                    </div>
+                <button id="start-session-btn">Započni trening</button>
+                <button id="back-to-routines-btn">Nazad na rutine</button>
+            </div>
+        </div>
+
+        <div id="workout-session-popup" class="popup-overlay" style="display: none;">
+            <div class="popup-content">
+                <h3 id="session-routine-name"></h3>
+                <h4 id="current-exercise-name"></h4>
+                <div class="session-controls-top">
+                    <button id="finish-training-btn">Završi trening</button>
+                </div>
+                <div id="sets-container">
+                    <table class="sets-table">
+                        <thead>
+                            <tr>
+                                <th>Set</th>
+                                <th>Težina (kg)</th>
+                                <th>Ponavljanja</th>
+                            </tr>
+                        </thead>
+                        <tbody id="sets-table-body"></tbody>
+                    </table>
+                </div>
+                <div class="session-controls">
+                    <button id="prev-exercise-btn" style="display:none;">Prethodna vježba</button>
+                    <button id="next-exercise-btn-popup">Sljedeća vježba</button>
+                </div>
             </div>
         </div>
 
@@ -54,51 +99,62 @@
             const profileLink = document.getElementById("profileLink");
             profileLink.href = `/profile?userId=${userId}`;
 
-            document.getElementById("routinesLink").href = `/routines?userId=${userId}`;
-
             const logoutLink = document.getElementById("logoutLink");
-            logoutLink.href = `/?userId=${userId}`;
+            if (logoutLink) {
+                logoutLink.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    if (confirm("Jeste li sigurni da se želite odjaviti?")) {
+                        window.location.href = `/?userId=${userId}`;
+                    }
+                });
+            }
+            
+            let userData;
 
             document.getElementById("sendButton").addEventListener("click", async () => {
-                const question = document.getElementById("questionInput").value.trim();
+            const question = document.getElementById("questionInput").value.trim();
                 if(!question) return;
 
                 const chatMessages = document.getElementById("chatMessages");
-
+            
                 try{
-                    const userRes = await fetch(`/api/users/${userId}`);
-                    const userData = await userRes.json();
-
                     const userName = userData.name || "Ti";
 
-                    chatMessages.innerHTML += `<div class="message user"><strong>${userName}:</strong> ${question}</div>`;
+                    const userMessageDiv = document.createElement('div');
+                            userMessageDiv.className = 'message user';
+                            userMessageDiv.innerHTML = `<strong>${userName}:</strong> ${question}`;
+                    chatMessages.appendChild(userMessageDiv);
+
                     document.getElementById("questionInput").value = "";
+            
                     const aiRes = await fetch(`/api/ai-chat`, {
                     method: "POST",
                     headers: {"Content-Type": "application/json"},
-                    body: JSON.stringify({userData, question})
-                });
+                    body: JSON.stringify({userId, userData, question})
+                    });
 
-                const aiData = await aiRes.json();
-                chatMessages.innerHTML += `<div class="message ai"><strong>Arnold AI:</strong> ${aiData.answer}</div>`;
-                chatMessages.scrollTop = chatMessages.scrollHeight;
+                    const aiData = await aiRes.json();
+            
+                    const aiMessageDiv = document.createElement('div');
+                    aiMessageDiv.className = 'message ai';
+                    aiMessageDiv.innerHTML = `<strong>Arnold AI:</strong> ${aiData.answer}`;
+                    chatMessages.appendChild(aiMessageDiv);
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
                 } catch (err) {
-                    chatMessages.innerHTML += `<div class="message error">Greška pri komunikaciji s asistentom.</div>`;
-                    console.error("AI greška:", err);
-                }
-            });
+                    const errorMessageDiv = document.createElement('div');
+                    errorMessageDiv.className = 'message error';
+                    errorMessageDiv.textContent = 'Greška pri komunikaciji s asistentom.';
+                            chatMessages.appendChild(errorMessageDiv);
+                            console.error("AI greška:", err);
+                 }
+});
 
             (async () => {
                 try {
                     const userRes = await fetch(`/api/users/${userId}`);
-                    const userData = await userRes.json();
-
+                    userData = await userRes.json();
                     const userName = userData.name || "Korisnik";
-
-                    // Prikaži ime korisnika u meniju
                     document.getElementById("userDisplay").textContent = `Korisnik: ${userName}`;
-
-                    // Prikaži tjelesne podatke dinamički
                     const userStatsDiv = document.getElementById("userStats");
                     userStatsDiv.innerHTML = `
                         <h3>Statistika</h3>
@@ -111,6 +167,278 @@
                     console.error("Ne mogu dohvatiti korisničke podatke:", e);
                 }
             })();
+
+            const routinesListDiv = document.getElementById("main-routines-list");
+            const routineDetailsContainer = document.getElementById("routine-details-container");
+            const backToRoutinesBtn = document.getElementById("back-to-routines-btn");
+            const startSessionBtn = document.getElementById("start-session-btn");
+            const workoutSessionPopup = document.getElementById("workout-session-popup");
+            const prevExerciseBtn = document.getElementById('prev-exercise-btn');
+            const nextExerciseBtnPopup = document.getElementById("next-exercise-btn-popup");
+            const finishTrainingBtn = document.getElementById('finish-training-btn');
+
+            let currentRoutineData = null;
+            let currentExerciseIndex = 0;
+            let trainingData = [];
+
+            async function loadAndDisplayRoutines() {
+                try {
+                    const res = await fetch(`/api/users/${userId}/routines`);
+                    if (!res.ok) {
+                        throw new Error(`Greška! Status: ${res.status}`);
+                    }
+                    const data = await res.json();
+                    const routines = data.routines;
+
+                    routinesListDiv.innerHTML = "";
+
+                    if (!routines || routines.length === 0) {
+                        routinesListDiv.innerHTML = "<p>Nema spremljenih rutina. Dodaj neku na stranici profila!</p>";
+                        return;
+                    }
+
+                    routines.forEach(routine => {
+                        const routineCard = document.createElement("div");
+                        routineCard.className = "routine-card";
+                        routineCard.innerHTML = `
+                            <h3>${routine.name}</h3>
+                            <button class="start-routine-btn" data-routine-id="${routine.id}">Započni trening</button>
+                        `;
+                        routinesListDiv.appendChild(routineCard);
+                    });
+
+                    document.querySelectorAll('.start-routine-btn').forEach(button => {
+                        button.addEventListener('click', (event) => {
+                            const routineId = event.target.dataset.routineId;
+                            displayRoutineDetails(routineId);
+                        });
+                    });
+                } catch (err) {
+                    console.error("Greška pri dohvaćanju rutina:", err);
+                    routinesListDiv.innerHTML = "<p>Greška pri učitavanju rutina.</p>";
+                }
+            }
+
+            async function displayRoutineDetails(routineId) {
+                try {
+                    const res = await fetch(`/api/users/${userId}/routines`);
+                    if (!res.ok) throw new Error("Greška pri dohvaćanju rutina.");
+                    const data = await res.json();
+                    const routine = data.routines.find(r => String(r.id) === String(routineId));
+
+                    if (!routine) {
+                        alert("Rutina nije pronađena.");
+                        return;
+                    }
+
+                    currentRoutineData = routine;
+
+                    document.getElementById('routine-details-name').textContent = routine.name;
+                    const exercisesTableBody = document.getElementById('routine-exercises-body');
+                    exercisesTableBody.innerHTML = "";
+
+                   if (routine.exercises && routine.exercises.length > 0) {
+                        routine.exercises.forEach(exercise => {
+                            if (!exercise) {
+                                console.warn("Pronađen null ili undefined objekt vježbe. Preskače se.");
+                                return;
+                            }
+
+                            const row = document.createElement("tr");
+                            const exerciseName = typeof exercise.exercise === 'string' ? exercise.exercise : (exercise.exercise && exercise.exercise.name ? exercise.exercise.name : 'Nepoznata vježba');
+                            row.innerHTML = `
+                                <td>${exerciseName}</td>
+                                <td>${exercise.sets}</td>
+                                <td>${exercise.weight}</td>
+                                <td>${exercise.reps}</td>
+                            `;
+                            exercisesTableBody.appendChild(row);
+                        });
+                        startSessionBtn.style.display = 'block';
+                    } else {
+                        exercisesTableBody.innerHTML = "<p>Ova rutina nema dodanih vježbi.</p>";
+                        startSessionBtn.style.display = 'none';
+                    }
+
+                    routinesListDiv.style.display = 'none';
+                    routineDetailsContainer.style.display = 'block';
+
+                } catch (error) {
+                    console.error("Greška pri prikazivanju detalja rutine:", error);
+                    alert("Došlo je do greške.");
+                }
+            }
+
+            function openWorkoutSessionPopup() {
+                if (!currentRoutineData || !currentRoutineData.exercises || currentRoutineData.exercises.length === 0) {
+                    alert("Rutina nema vježbi za početak treninga.");
+                    return;
+                }
+
+                currentExerciseIndex = 0;
+                trainingData = currentRoutineData.exercises
+                    .filter(ex => ex != null && typeof ex === 'object')
+                    .map(ex => {
+                        const exerciseName = (typeof ex.exercise === 'object' && ex.exercise.name)
+                            ? ex.exercise.name
+                            : ex.exercise;
+
+                        return {
+                            ...ex,
+                            exercise: exerciseName,
+                            sessionSets: []
+                        };
+                    });
+                
+                displayCurrentExerciseInPopup();
+                workoutSessionPopup.style.display = 'flex';
+                document.getElementById('session-routine-name').textContent = currentRoutineData.name;
+            }
+
+            function displayCurrentExerciseInPopup() {
+                const setsTableBody = document.getElementById('sets-table-body');
+                const exercise = trainingData[currentExerciseIndex];
+                const exerciseName = typeof exercise.exercise === 'string' ? exercise.exercise : (exercise.exercise && exercise.exercise.name ? exercise.exercise.name : 'Nepoznata vježba');
+                document.getElementById('current-exercise-name').textContent = `Vježba: ${exerciseName}`;
+                setsTableBody.innerHTML = '';
+                
+                for (let i = 0; i < exercise.sets; i++) {
+                    const row = document.createElement('tr');
+                    const setNumber = i + 1;
+                    
+                    const sessionSet = exercise.sessionSets[i];
+                    const weightValue = sessionSet ? sessionSet.weight : exercise.weight;
+                    const repsValue = sessionSet ? sessionSet.reps : exercise.reps;
+
+                    row.innerHTML = `
+                        <td>Set ${setNumber}</td>
+                        <td><input type="number" class="set-weight-input" value="${weightValue}"></td>
+                        <td><input type="number" class="set-reps-input" value="${repsValue}"></td>
+                    `;
+                    setsTableBody.appendChild(row);
+                }
+
+                prevExerciseBtn.style.display = currentExerciseIndex > 0 ? 'block' : 'none';
+                nextExerciseBtnPopup.textContent = currentExerciseIndex < trainingData.length - 1 ? 'Sljedeća vježba' : 'Završi trening';
+            }
+
+            function saveCurrentExerciseSets() {
+                const exercise = trainingData[currentExerciseIndex];
+                const rows = document.querySelectorAll('#sets-table-body tr');
+                exercise.sessionSets = [];
+                rows.forEach(row => {
+                    const weightInput = row.querySelector('.set-weight-input');
+                    const repsInput = row.querySelector('.set-reps-input');
+                    exercise.sessionSets.push({
+                        weight: parseFloat(weightInput.value),
+                        reps: parseInt(repsInput.value)
+                    });
+                });
+            }
+
+            async function finishTrainingAndSave() {
+                saveCurrentExerciseSets();
+
+                const updatedExercises = trainingData
+                    .filter(exercise => exercise != null && exercise.exercise != null)
+                    .map(exercise => {
+                        let bestSet = { weight: exercise.weight, reps: exercise.reps };
+                        if (exercise.sessionSets && exercise.sessionSets.length > 0) {
+                            bestSet = exercise.sessionSets.reduce((prev, current) => {
+                                if (current == null || prev == null) return prev; 
+                        
+                                if (current.weight > prev.weight) {
+                                    return current;
+                                }
+                                if (current.weight === prev.weight && current.reps > prev.reps) {
+                                    return current;
+                                }
+                                return prev;
+                            }, bestSet);
+                        }
+
+                        const exerciseName = (typeof exercise.exercise === 'object') ? exercise.exercise.name : exercise.exercise;
+
+                        return {
+                            exercise: exerciseName,
+                            weight: bestSet.weight,
+                            reps: bestSet.reps,
+                            sets: exercise.sets
+                        };
+                    });
+
+                
+                if (updatedExercises.length === 0) {
+                    alert("Nema valjanih vježbi za spremanje. Trening nije spremljen.");
+                    workoutSessionPopup.style.display = 'none';
+                    window.location.reload();
+                    return;
+                }
+
+                try {
+                    const response = await fetch(`/api/users/${userId}/routines/${currentRoutineData.id}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ exercises: updatedExercises }),
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Greška pri spremanju podataka treninga.');
+                    }
+
+                    const result = await response.json();
+                    alert(result.message);
+                    window.location.reload();
+                } catch (error) {
+                    console.error('Došlo je do greške:', error);
+                    alert('Greška pri spremanju podataka treninga.');
+                }
+            }
+
+            if (startSessionBtn) {
+                startSessionBtn.addEventListener('click', openWorkoutSessionPopup);
+            }
+
+            if (backToRoutinesBtn) {
+                backToRoutinesBtn.addEventListener('click', () => {
+                routineDetailsContainer.style.display = 'none';
+                routinesListDiv.style.display = 'block';
+                });
+            }
+
+            if (prevExerciseBtn) {
+                prevExerciseBtn.addEventListener('click', () => {
+                    saveCurrentExerciseSets();
+                    currentExerciseIndex--;
+                    displayCurrentExerciseInPopup();
+                });
+            }
+
+            if (nextExerciseBtnPopup) {
+                nextExerciseBtnPopup.addEventListener('click', () => {
+                    saveCurrentExerciseSets();
+                    if (currentExerciseIndex < trainingData.length - 1) {
+                        currentExerciseIndex++;
+                        displayCurrentExerciseInPopup();
+                    } else {
+                        finishTrainingAndSave();
+                    }
+                });
+            }
+
+            if (finishTrainingBtn) {
+                finishTrainingBtn.addEventListener('click', () => {
+                    if(confirm("Jeste li sigurni da želite prekinuti trening? Neodrađeni setovi neće biti spremljeni.")) {
+                        workoutSessionPopup.style.display = 'none';
+                        alert('Trening prekinut!');
+                        window.location.reload();
+                    }
+                });
+            }
+            
+            window.addEventListener('load', loadAndDisplayRoutines);
         </script>
     </body>
 </html>

@@ -8,16 +8,345 @@
   },
   {
     "id": 2,
+    "name": "Smith Machine Incline Bench Press",
+    "muscleGroup": "Chest",
+    "equipment": "Smith machine",
+    "difficulty": "Intermediate"
+  },
+  {
+    "id": 3,
+    "name": "Incline Bench Press",
+    "muscleGroup": "Chest",
+    "equipment": "Barbell",
+    "difficulty": "Intermediate"
+  },
+  {
+    "id": 4,
+    "name": "Decline Bench Press",
+    "muscleGroup": "Chest",
+    "equipment": "Barbell",
+    "difficulty": "Intermediate"
+  },
+  {
+    "id": 5,
+    "name": "Machine Chest Fly",
+    "muscleGroup": "Chest",
+    "equipment": "Machine",
+    "difficulty": "Beginner"
+  },
+  {
+    "id": 6,
+    "name": "Cable Chest Fly",
+    "muscleGroup": "Chest",
+    "equipment": "Cables",
+    "difficulty": "Intermediate"
+  },
+  {
+    "id": 7,
+    "name": "Dumbbell Press",
+    "muscleGroup": "Chest",
+    "equipment": "Dumbbells",
+    "difficulty": "Intermediate"
+  },
+  {
+    "id": 8,
+    "name": "Incline Dumbbell Press",
+    "muscleGroup": "Chest",
+    "equipment": "Dumbbells",
+    "difficulty": "Intermediate"
+  },
+  {
+    "id": 9,
+    "name": "Push-Ups",
+    "muscleGroup": "Chest",
+    "equipment": "Bodyweight",
+    "difficulty": "Beginner"
+  },
+  {
+    "id": 10,
+    "name": "Dips",
+    "muscleGroup": "Chest",
+    "equipment": "Parallel bars",
+    "difficulty": "Intermediate"
+  },
+  {
+    "id": 11,
+    "name": "Pull-Ups",
+    "muscleGroup": "Back",
+    "equipment": "Pull-up bar",
+    "difficulty": "Intermediate"
+  },
+  {
+    "id": 12,
+    "name": "Machine Lat Pulldowns",
+    "muscleGroup": "Back",
+    "equipment": "Machine",
+    "difficulty": "Beginner"
+  },
+  {
+    "id": 13,
+    "name": "Cable Lat Pulldowns",
+    "muscleGroup": "Back",
+    "equipment": "Cables",
+    "difficulty": "Beginner"
+  },
+  {
+    "id": 14,
+    "name": "Single Arm Lat Pulldowns",
+    "muscleGroup": "Back",
+    "equipment": "Cables",
+    "difficulty": "Intermediate"
+  },
+  {
+    "id": 15,
+    "name": "Machine Rows",
+    "muscleGroup": "Back",
+    "equipment": "Machine",
+    "difficulty": "Beginner"
+  },
+  {
+    "id": 16,
+    "name": "Cable Rows",
+    "muscleGroup": "Back",
+    "equipment": "Cables",
+    "difficulty": "Beginner"
+  },
+  {
+    "id": 17,
+    "name": "T-Bar Rows",
+    "muscleGroup": "Back",
+    "equipment": "T-bar row machine",
+    "difficulty": "Intermediate"
+  },
+  {
+    "id": 18,
+    "name": "Triceps Pushdowns",
+    "muscleGroup": "Triceps",
+    "equipment": "Cables",
+    "difficulty": "Beginner"
+  },
+  {
+    "id": 19,
+    "name": "Single Arm Triceps Pushdowns",
+    "muscleGroup": "Triceps",
+    "equipment": "Cables",
+    "difficulty": "Beginner"
+  },
+  {
+    "id": 20,
+    "name": "Overhead Triceps Extensions",
+    "muscleGroup": "Triceps",
+    "equipment": "Dumbbells",
+    "difficulty": "Intermediate"
+  },
+  {
+    "id": 21,
+    "name": "Single Arm Triceps Extensions",
+    "muscleGroup": "Triceps",
+    "equipment": "Dumbbells",
+    "difficulty": "Intermediate"
+  },
+  {
+    "id": 22,
+    "name": "Machine Triceps Extensions",
+    "muscleGroup": "Triceps",
+    "equipment": "Machine",
+    "difficulty": "Beginner"
+  },
+  {
+    "id": 23,
+    "name": "Dumbbell Triceps Extensions",
+    "muscleGroup": "Triceps",
+    "equipment": "Dumbbells",
+    "difficulty": "Intermediate"
+  },
+  {
+    "id": 24,
+    "name": "French Triceps Extensions",
+    "muscleGroup": "Triceps",
+    "equipment": "Barbell",
+    "difficulty": "Advanced"
+  },
+  {
+    "id": 25,
+    "name": "Dumbbell Bicep Curls",
+    "muscleGroup": "Biceps",
+    "equipment": "Dumbbells",
+    "difficulty": "Beginner"
+  },
+  {
+    "id": 26,
+    "name": "Barbell Bicep Curls",
+    "muscleGroup": "Biceps",
+    "equipment": "Barbell",
+    "difficulty": "Beginner"
+  },
+  {
+    "id": 27,
+    "name": "EZ Bar Bicep Curls",
+    "muscleGroup": "Biceps",
+    "equipment": "EZ bar",
+    "difficulty": "Beginner"
+  },
+  {
+    "id": 28,
+    "name": "Cable Bicep Curls",
+    "muscleGroup": "Biceps",
+    "equipment": "Cables",
+    "difficulty": "Beginner"
+  },
+  {
+    "id": 29,
+    "name": "Bayesian Bicep Curls",
+    "muscleGroup": "Biceps",
+    "equipment": "Dumbbells",
+    "difficulty": "Advanced"
+  },
+  {
+    "id": 30,
+    "name": "Reverse Grip Pulldowns",
+    "muscleGroup": "Biceps",
+    "equipment": "Cable machine",
+    "difficulty": "Intermediate"
+  },
+  {
+    "id": 31,
+    "name": "Seated Incline Bicep Curls",
+    "muscleGroup": "Biceps",
+    "equipment": "Dumbbells",
+    "difficulty": "Intermediate"
+  },
+  {
+    "id": 32,
+    "name": "Dumbbell Lateral Raises",
+    "muscleGroup": "Shoulders",
+    "equipment": "Dumbbells",
+    "difficulty": "Intermediate"
+  },
+  {
+    "id": 33,
+    "name": "Cable Lateral Raises",
+    "muscleGroup": "Shoulders",
+    "equipment": "Cables",
+    "difficulty": "Intermediate"
+  },
+  {
+    "id": 34,
+    "name": "Dumbbell Shoulder Press",
+    "muscleGroup": "Shoulders",
+    "equipment": "Dumbbells",
+    "difficulty": "Intermediate"
+  },
+  {
+    "id": 35,
+    "name": "Barbell Shoulder Press",
+    "muscleGroup": "Shoulders",
+    "equipment": "Barbell",
+    "difficulty": "Intermediate"
+  },
+  {
+    "id": 36,
+    "name": "Cable Crossovers (Rear Delt)",
+    "muscleGroup": "Shoulders",
+    "equipment": "Cables",
+    "difficulty": "Intermediate"
+  },
+  {
+    "id": 37,
+    "name": "Front Raises",
+    "muscleGroup": "Shoulders",
+    "equipment": "Dumbbells",
+    "difficulty": "Intermediate"
+  },
+  {
+    "id": 38,
+    "name": "Squat",
+    "muscleGroup": "Legs",
+    "equipment": "Barbell",
+    "difficulty": "Intermediate"
+  },
+  {
+    "id": 39,
+    "name": "Smith Machine Squat",
+    "muscleGroup": "Legs",
+    "equipment": "Smith machine",
+    "difficulty": "Intermediate"
+  },
+  {
+    "id": 40,
+    "name": "Hacksquat",
+    "muscleGroup": "Legs",
+    "equipment": "Hack squat machine",
+    "difficulty": "Intermediate"
+  },
+  {
+    "id": 41,
+    "name": "Leg Press",
+    "muscleGroup": "Legs",
+    "equipment": "Leg press machine",
+    "difficulty": "Intermediate"
+  },
+  {
+    "id": 42,
+    "name": "Seated Leg Press",
+    "muscleGroup": "Legs",
+    "equipment": "Seated leg press machine",
+    "difficulty": "Intermediate"
+  },
+  {
+    "id": 43,
+    "name": "Bulgarian Split Squat",
+    "muscleGroup": "Legs",
+    "equipment": "Dumbbells",
+    "difficulty": "Intermediate"
+  },
+  {
+    "id": 44,
+    "name": "Laying Hamstring Curls",
+    "muscleGroup": "Legs",
+    "equipment": "Lying leg curl machine",
+    "difficulty": "Beginner"
+  },
+  {
+    "id": 45,
+    "name": "Seated Hamstring Curls",
+    "muscleGroup": "Legs",
+    "equipment": "Seated leg curl machine",
+    "difficulty": "Beginner"
+  },
+  {
+    "id": 46,
     "name": "Deadlift",
     "muscleGroup": "Back",
     "equipment": "Barbell",
     "difficulty": "Advanced"
   },
   {
-    "id": 3,
-    "name": "Squat",
+    "id": 47,
+    "name": "Romanian Deadlift",
     "muscleGroup": "Legs",
     "equipment": "Barbell",
     "difficulty": "Intermediate"
+  },
+  {
+    "id": 48,
+    "name": "Calf Raises",
+    "muscleGroup": "Calves",
+    "equipment": "Bodyweight",
+    "difficulty": "Beginner"
+  },
+  {
+    "id": 49,
+    "name": "Single Leg Calf Raise",
+    "muscleGroup": "Calves",
+    "equipment": "Bodyweight",
+    "difficulty": "Beginner"
+  },
+  {
+    "id": 50,
+    "name": "Seated Calf Raise (Leg Press Machine)",
+    "muscleGroup": "Calves",
+    "equipment": "Leg press machine",
+    "difficulty": "Beginner"
   }
 ]
