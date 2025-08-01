@@ -1,0 +1,23 @@
+[
+  {
+    "id": 1,
+    "name": "Bench Press",
+    "muscleGroup": "Chest",
+    "equipment": "Barbell",
+    "difficulty": "Intermediate"
+  },
+  {
+    "id": 2,
+    "name": "Deadlift",
+    "muscleGroup": "Back",
+    "equipment": "Barbell",
+    "difficulty": "Advanced"
+  },
+  {
+    "id": 3,
+    "name": "Squat",
+    "muscleGroup": "Legs",
+    "equipment": "Barbell",
+    "difficulty": "Intermediate"
+  }
+]

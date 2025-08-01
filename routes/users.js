@@ -4,6 +4,8 @@ const fs = require('fs');
 const path = require('path');
 
 const usersFilePath = path.join(__dirname, '../users.json');
+const routinesPath = path.join(__dirname, '../routines.json');
+const exercisesFile = path.join(__dirname, '../exercises.json');
 
 router.get('/:id', (req, res) => {
   const userId = req.params.id;
@@ -26,25 +28,11 @@ router.get('/:id', (req, res) => {
       return res.status(404).json({ message: "Korisnik nije pronađen." });
     }
 
-    // Vrati korisnika bez lozinke zbog sigurnosti
     const { password, ...safeUser } = user;
     return res.json(safeUser);
   });
 });
 
-router.get('/userdata', (req, res) => {
-  // Ovdje trebaš napraviti stvarnu logiku dohvaćanja ulogiranog korisnika
-  // Ja ću za primjer uzeti prvi user iz users.json:
-  const user = users[0]; 
-
-  // Pretpostavimo da user objekt ima polja: height, weight, age, calories
-  res.json({
-    height: user.height,
-    weight: user.weight,
-    age: user.age,
-    calories: user.dailyCalories,
-  });
-});
 
 router.post('/login', (req, res) => {
     const { email, password } = req.body;
@@ -184,5 +172,118 @@ router.post('/:id', (req, res) => {
   });
 });
 
+router.get('/:id/routines', (req, res) => {
+    const userId = req.params.id;
+
+    fs.readFile(routinesPath, 'utf8', (err, data) => {
+        if (err) {
+            console.error("Greška pri čitanju rutina:", err);
+            return res.status(500).json({ error: 'Greška na serveru.' });
+        }
+
+        let allRoutines = [];
+        try {
+            allRoutines = JSON.parse(data);
+        } catch (parseErr) {
+            console.error("Greška pri parsiranju rutina:", parseErr);
+            return res.status(500).json({ error: 'Greška na serveru.' });
+        }
+
+        const userRoutines = allRoutines.find(u => String(u.userId) === String(userId));
+        
+        if (!userRoutines) {
+            return res.json({ routines: [] });
+        }
+
+        return res.json(userRoutines);
+    });
+});
+
+router.post('/:id/routines', (req, res) => {
+    const userId = req.params.id;
+    const { name, id, exercises } = req.body; 
+
+    fs.readFile(routinesPath, 'utf8', (err, data) => {
+        if (err) return res.status(500).json({ error: 'Greška pri čitanju rutina.' });
+
+        let allRoutines = [];
+        try {
+            allRoutines = JSON.parse(data);
+        } catch {
+            return res.status(500).json({ error: 'Greška pri parsiranju rutina.' });
+        }
+
+        let user = allRoutines.find(u => String(u.userId) === String(userId));
+
+        if (!user) {
+            user = { userId, routines: [] };
+            allRoutines.push(user);
+        }
+
+        if (name) {
+          const newRoutine = {
+                id: Date.now(),
+                name,
+                exercises: []
+            };
+            user.routines.push(newRoutine);
+            fs.writeFile(routinesPath, JSON.stringify(allRoutines, null, 2), (err) => {
+                if (err) return res.status(500).json({ error: 'Greška pri spremanju rutina.' });
+                res.json({ message: 'Rutina dodana.', routineId: newRoutine.id });
+            });
+        } else {
+            return res.status(400).json({ error: 'Naziv rutine je obavezan za kreiranje nove rutine.' });
+        }
+    });
+});
+
+router.post('/:id/routines/:routineId/add-exercise', (req, res) => {
+    const userId = req.params.id;
+    const routineId = req.params.routineId;
+    const newExercise = req.body;
+
+    fs.readFile(routinesPath, 'utf8', (err, data) => {
+        if (err) return res.status(500).json({ error: 'Greška pri čitanju rutina.' });
+        let allRoutines = JSON.parse(data);
+        const userIndex = allRoutines.findIndex(u => String(u.userId) === String(userId));
+
+        if (userIndex === -1) {
+            return res.status(404).json({ error: 'Korisnik nije pronađen.' });
+        }
+
+        const routine = allRoutines[userIndex].routines.find(r => String(r.id) === String(routineId));
+
+        if (!routine) {
+            return res.status(404).json({ error: 'Rutina nije pronađena.' });
+        }
+
+        if (!routine.exercises) {
+            routine.exercises = [];
+        }
+
+        routine.exercises.push(newExercise);
+
+        fs.writeFile(routinesPath, JSON.stringify(allRoutines, null, 2), (err) => {
+            if (err) return res.status(500).json({ error: 'Greška pri spremanju vježbe.' });
+            res.json({ message: 'Vježba dodana u rutinu.' });
+        });
+    });
+});
+
+router.get('/exercises', (req, res) => {
+  fs.readFile(exercisesFile, 'utf8', (err, data) => {
+    if (err) {
+      console.error("Greška pri čitanju exercises.json", err);
+      return res.status(500).json({ message: "Greška na serveru." });
+    }
+    try {
+      const exercises = JSON.parse(data);
+      res.json(exercises);
+    } catch (parseErr) {
+      console.error("Greška pri parsiranju exercises.json", parseErr);
+      res.status(500).json({ message: "Greška pri parsiranju podataka." });
+    }
+  });
+});
 
 module.exports = router;

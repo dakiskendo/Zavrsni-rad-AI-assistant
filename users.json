@@ -1,19 +1,5 @@
 [
   {
-    "id": "1753716677308",
-    "name": "Marko",
-    "email": "marko@marko.marko",
-    "password": "123",
-    "gender": "male",
-    "age": 24,
-    "height": 195,
-    "weight": 77,
-    "activityLevel": 1.725,
-    "medicalConditions": "Kronove bolesti",
-    "basalMetabolicRate": 1873.75,
-    "caloricIntake": 3232
-  },
-  {
     "id": "1753809430605",
     "name": "Davor",
     "email": "daki@gmail.com",
@@ -26,47 +12,5 @@
     "medicalConditions": "Hipotiroza štitnjače",
     "basalMetabolicRate": 2130,
     "caloricIntake": 3301.5
-  },
-  {
-    "id": 1753810158809,
-    "name": "Jozo",
-    "email": "jozo@gmail.com",
-    "password": "123",
-    "gender": "female",
-    "age": "18",
-    "height": "170",
-    "weight": "110",
-    "activityLevel": "1.375",
-    "medicalConditions": "Retardacija",
-    "basalMetabolicRate": 1911.5,
-    "caloricIntake": 2628.3125
-  },
-  {
-    "id": 1753812056999,
-    "name": "Ivan",
-    "email": "ivan@gmail.com",
-    "password": "123",
-    "gender": "male",
-    "age": "23",
-    "height": "178",
-    "weight": "121",
-    "activityLevel": "1.9",
-    "medicalConditions": "Švarcenegerova bolest",
-    "basalMetabolicRate": 2212.5,
-    "caloricIntake": 4203.75
-  },
-  {
-    "id": 1753822612594,
-    "name": "Davor",
-    "email": "dakiskendo@gmail.com",
-    "password": "123123",
-    "gender": "male",
-    "age": "23",
-    "height": "192",
-    "weight": "100",
-    "activityLevel": "1.55",
-    "medicalConditions": "Hašimotov sindrom",
-    "basalMetabolicRate": 2090,
-    "caloricIntake": 3239.5
   }
 ]

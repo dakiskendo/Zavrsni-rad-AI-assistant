@@ -1,0 +1,39 @@
+[
+  {
+    "userId": "1753809430605",
+    "routines": [
+      {
+        "id": 1754053767675,
+        "name": "Push day",
+        "exercises": [
+          {
+            "exercise": "Deadlift",
+            "weight": 50,
+            "reps": 11
+          },
+          {
+            "exercise": "Bench Press",
+            "weight": 100,
+            "reps": 5
+          },
+          {
+            "exercise": "Squat",
+            "weight": 100,
+            "reps": 5
+          }
+        ]
+      },
+      {
+        "id": 1754059599635,
+        "name": "Pull day",
+        "exercises": [
+          {
+            "exercise": "Bench Press",
+            "weight": 55,
+            "reps": 11
+          }
+        ]
+      }
+    ]
+  }
+]

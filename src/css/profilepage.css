@@ -10,24 +10,33 @@ body {
     background-position: center;
     background-repeat: no-repeat;
     background-attachment: fixed;
-    color: white; /* da tekst bude vidljiv na tamnoj pozadini */
+    color: white; 
 }
 
-/* Koristimo istu container klasu kao i na mainpage */
-.container {
-    text-shadow: 2px 3px 2px black;
+.main-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 20px;
+}
+
+
+.edit-container {
+    flex: 1; 
     max-width: 700px;
-    margin-left: auto;
-    margin-right: 40px; /* možeš staviti i 0 ako hoćeš da je skroz uz rub */
     background-color: rgba(104, 104, 104, 0.575);
     padding: 30px;
     border-radius: 10px;
-    box-shadow: 0 0 12px rgba(0,0,0,0.1);
+    box-shadow: 0 0 12px rgba(0,0,0,0.6);
+    text-shadow: 2px 3px 2px black;
 }
 
-h1 {
+.edit-container h1 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #444;
+    padding-bottom: 5px;
     text-align: center;
-    margin-bottom: 30px;
 }
 
 #activityDisclaimer{
@@ -42,7 +51,7 @@ h1 {
     text-shadow: 2px 2px 2px black;
 }
 
-/* Forma unutar container-a */
+
 form {
     display: flex;
     flex-direction: column;
@@ -75,12 +84,12 @@ input[type="text"]:focus,
 input[type="email"]:focus,
 input[type="number"]:focus,
 input[type="password"]:focus,
-select:focus {
+select:focus, textarea:focus {
     outline: 2px solid #0066cc;
     border-color: #0066cc;
 }
 
-button[type="submit"] {
+button {
     padding: 12px;
     font-size: 16px;
     background-color: #0066cc;
@@ -88,17 +97,21 @@ button[type="submit"] {
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    width: 50%;
-    align-self: center;
-    margin-top: 10px;
     text-shadow: 2px 3px 2px black;
+    transition: background-color 0.2s ease-in-out;
 }
 
-button[type="submit"]:hover {
+button[type="submit"]:hover, .add-exercise-btn:hover {
     background-color: #0055aa;
 }
 
-/* Navigacijski meni, isti kao mainpage */
+.add-exercise-btn{
+    margin: 10px 0;
+    width:100%;
+    text-align:center;
+}
+
+
 .menu {
     position: fixed;
     top: 10px;
@@ -149,5 +162,171 @@ button[type="submit"]:hover {
     border-radius: 4px;
     border: 1px solid #aaa;
     box-sizing: border-box;
+}
+
+.routines-container {
+    flex: 1;
     width: 100%;
+    max-width: 500px;
+    background-color: rgba(104, 104, 104, 0.575);
+    color: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 12px rgba(0,0,0,0.6);
+    text-shadow: 2px 3px 2px black;
+    height: fit-content;
+}
+
+#openNewRoutinePopup {
+    width: 100%;
+    margin: 10px 0;
+    text-align:center;
+}
+
+
+.routines-container h1 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #444;
+  padding-bottom: 5px;
+  text-align: center;
+}
+
+.routine-item {
+  margin-bottom: 10px;
+  padding: 10px;
+  background-color: #2a2a40;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.routine-item ul {
+  padding-left: 20px;
+}
+
+.routine-container {
+    margin-top: 15px;
+    background-color: rgba(0, 0, 0, 0.4);
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.routine-container h3 {
+    margin-top: 5px;
+    margin-bottom: 15px;
+    font-size: 20px;
+    text-align: center;
+    border-bottom: 1px solid #444;
+    padding-bottom: 10px;
+}
+
+.exercise-table {
+    width: 100%;
+    border-collapse: collapse; 
+    margin-top: 15px;
+}
+
+.exercise-table th,
+.exercise-table td {
+    padding: 10px 15px;
+    text-align: left;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.popup-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    background-color: rgba(30, 30, 30, 0.95);
+    padding: 30px;
+    border-radius: 12px;
+    max-width: 600px;
+    width: 90%;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+    text-align: center;
+    color: white;
+    text-shadow: 1px 1px 2px black;
+}
+
+.popup-content h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+.popup-content p {
+    font-size: 16px;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.popup-content button {
+    padding: 10px 20px;
+    background-color: #0066cc;
+    color: white;
+    font-weight: bold;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    text-shadow: 2px 2px 2px black;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.popup-content button:hover {
+    background-color: #004c99;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@media (max-width: 900px) {
+    .main-container {
+        flex-direction: column;
+        padding: 20px 10px;
+    }
+
+    .routines-container {
+        width: 100%;
+        margin-bottom: 30px;
+    }
+
+    .edit-container {
+        max-width: 100%;
+        padding: 20px;
+    }
 }
