@@ -1,4 +1,5 @@
 const express = require('express');
+const session = require('express-session');
 const fs = require('fs');
 const path = require('path');
 const app = express();
@@ -23,6 +24,13 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'src/components/LoginPage.html'));
 
 });
+
+app.use(session({
+  secret: 'your_secret_key',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: false }
+}));
 
 app.use('/api/users', usersRoutes);
 app.use('/api/ai-chat', aiRoutes);

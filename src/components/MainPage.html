@@ -122,7 +122,7 @@
 
                     const userMessageDiv = document.createElement('div');
                             userMessageDiv.className = 'message user';
-                            userMessageDiv.innerHTML = `<strong>${userName}:</strong> ${question}`;
+                            userMessageDiv.innerHTML = `<strong>${userName}:</strong><br>${question}`;
                     chatMessages.appendChild(userMessageDiv);
 
                     document.getElementById("questionInput").value = "";
@@ -134,10 +134,19 @@
                     });
 
                     const aiData = await aiRes.json();
+
+                    function convertMarkdownToHtml(text) {
+                        let html = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+                        html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
+                        html = html.replace(/\n/g, '<br>');
+                        return html;
+                    }
+
+                    const formatAnswer = convertMarkdownToHtml(aiData.answer);
             
                     const aiMessageDiv = document.createElement('div');
                     aiMessageDiv.className = 'message ai';
-                    aiMessageDiv.innerHTML = `<strong>Arnold AI:</strong> ${aiData.answer}`;
+                    aiMessageDiv.innerHTML = `<strong>Arnold AI:</strong><br>${formatAnswer}`;
                     chatMessages.appendChild(aiMessageDiv);
                     chatMessages.scrollTop = chatMessages.scrollHeight;
                 } catch (err) {

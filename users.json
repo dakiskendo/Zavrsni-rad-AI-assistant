@@ -26,5 +26,19 @@
     "medicalConditions": "Bolest gušterače",
     "basalMetabolicRate": 1933.75,
     "caloricIntake": 2997.3125
+  },
+  {
+    "id": 1754320142074,
+    "name": "Davor",
+    "email": "davor@pmfst.hr",
+    "password": "123123",
+    "gender": "male",
+    "age": "23",
+    "height": "192",
+    "weight": "104",
+    "activityLevel": "1.55",
+    "medicalConditions": "Hipotiroza štitnjače, loš vid na daljinu",
+    "basalMetabolicRate": 2130,
+    "caloricIntake": 3301.5
   }
 ]

@@ -1,0 +1,128 @@
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    font-family: sans-serif;
+    background-image: url("/img/arnoldwhite.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    color: white; 
+    text-shadow: 2px 3px 2px black;
+    padding: 20px 0;
+    box-sizing: border-box;
+}
+
+
+h1 {
+    font-size: 2.5em;
+    margin-bottom: 20px;
+    text-shadow: 2px 3px 2px black;
+}
+
+
+#registerform {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: stretch;
+    background-color: rgba(104, 104, 104, 0.575);
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 12px rgba(0,0,0,0.6);
+    max-width: 600px;
+    width: 90%;
+}
+
+
+label {
+    font-weight: bold;
+    margin-bottom: -10px;
+    text-align: left;
+    width: 100%;
+    text-shadow: 2px 3px 2px black;
+}
+
+
+input[type="text"],
+input[type="email"],
+input[type="number"],
+input[type="password"],
+select,
+textarea {
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 4px;
+    border: 1px solid #aaa;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+
+input:focus, select:focus, textarea:focus {
+    outline: 2px solid #0066cc;
+    border-color: #0066cc;
+}
+
+button[type="submit"] {
+    padding: 12px;
+    font-size: 16px;
+    background-color: #0066cc;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-shadow: 2px 3px 2px black;
+    transition: background-color 0.2s ease-in-out;
+    width: 100%;
+}
+
+
+button[type="submit"]:hover {
+    background-color: #0055aa;
+}
+
+
+p {
+    font-size: large;
+    border-style: solid;
+    border-radius: 10px;
+    border-width: 5px;
+    border-color: #6b6b6b;
+    background-color: rgba(0, 102, 219, 0.8);
+    margin: 0;
+    padding: 10px;
+    text-shadow: 2px 2px 2px black;
+}
+
+
+#medicalConditions {
+    height: 100px;
+}
+
+
+#activityDisclaimer {
+    font-size:large;
+    border-style: solid;
+    border-radius:10px;
+    border-width: 5px;
+    border-color:#6b6b6b;
+    background-color: rgba(0, 102, 219, 0.8);
+    margin: 0;
+    padding: 10px;
+    text-shadow: 2px 2px 2px black;
+}
+
+
+#registerMessage {
+    margin-top: 15px;
+    font-size: 1.1em;
+    color: #4CAF50;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 10px;
+    border-radius: 5px;
+}
