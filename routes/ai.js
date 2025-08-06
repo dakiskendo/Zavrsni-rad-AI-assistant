@@ -42,7 +42,7 @@ Korisnik:
 Koji automobil je najbolji za mršavljenje?
 
 Asistent:
-Žao mi je, Davor, ali ja sam stručnjak za fitness, a ne za automobile. Mogu ti reći da ti za mršavljenje ne treba auto, već upornost i dobra prehrana.
+Žao mi je, ${userData.name}, ali ja sam stručnjak za fitness, a ne za automobile. Mogu ti reći da ti za mršavljenje ne treba auto, već upornost i dobra prehrana.
 </stop>
 
 ---

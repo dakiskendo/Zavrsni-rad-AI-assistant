@@ -268,6 +268,42 @@
                 }
             });
 
+            async function deleteRoutine(routineId) {
+                try {
+                    const res = await fetch(`/api/users/${userId}/routines/${routineId}`, {
+                        method: 'DELETE'
+                    });
+                    if (res.ok) {
+                        showConfirmationDialog("Rutina uspješno obrisana!", () => {
+                            loadUserRoutines();
+                        });
+                    } else {
+                        throw new Error('Greška prilikom brisanja rutine.');
+                    }
+                } catch (err) {
+                    console.error("Greška pri brisanju rutine:", err);
+                    showConfirmationDialog("Greška pri brisanju rutine.", () => {});
+                }
+            }
+            
+            async function deleteExercise(routineId, exerciseIndex) {
+                 try {
+                    const res = await fetch(`/api/users/${userId}/routines/${routineId}/remove-exercise/${exerciseIndex}`, {
+                        method: 'DELETE'
+                    });
+                    if (res.ok) {
+                        showConfirmationDialog("Vježba uspješno obrisana!", () => {
+                            loadUserRoutines();
+                        });
+                    } else {
+                        throw new Error('Greška prilikom brisanja vježbe.');
+                    }
+                 } catch (err) {
+                    console.error("Greška pri brisanju vježbe:", err);
+                    showConfirmationDialog("Greška pri brisanju vježbe.", () => {});
+                 }
+            }
+
             async function loadUserRoutines() {
                 try {
                     const res = await fetch(`/api/users/${userId}/routines`);
@@ -290,9 +326,26 @@
                         const routineContainer = document.createElement("div");
                         routineContainer.className = "routine-container";
 
+                        const routineHeader = document.createElement("div");
+                        routineHeader.className = "routine-header";
+                        
                         const routineTitle = document.createElement("h3");
                         routineTitle.textContent = routine.name;
-                        routineContainer.appendChild(routineTitle);
+                        routineHeader.appendChild(routineTitle);
+
+                        const deleteRoutineBtn = document.createElement("button");
+                        deleteRoutineBtn.className = "delete-routine-btn";
+                        deleteRoutineBtn.innerHTML = `
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash-2"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
+                        `;
+                        deleteRoutineBtn.addEventListener("click", () => {
+                            showConfirmationDialog(`Jeste li sigurni da želite obrisati rutinu "${routine.name}"?`, () => {
+                                deleteRoutine(routine.id);
+                            });
+                        });
+                        routineHeader.appendChild(deleteRoutineBtn);
+                        
+                        routineContainer.appendChild(routineHeader);
 
                         const exercisesList = document.createElement("div");
                         if (routine.exercises && routine.exercises.length > 0) {
@@ -310,27 +363,41 @@
                             table.appendChild(thead);
 
                             const tbody = document.createElement("tbody");
-                                routine.exercises.forEach(exercise => {
-                                    if (!exercise || (!exercise.exercise && typeof exercise.exercise !== 'string')) {
-                                        console.warn("Pronađen neispravan objekt vježbe. Preskače se.");
-                                        return;
-                                    }
+                            routine.exercises.forEach((exercise, index) => {
+                                if (!exercise || (!exercise.exercise && typeof exercise.exercise !== 'string')) {
+                                    console.warn("Pronađen neispravan objekt vježbe. Preskače se.");
+                                    return;
+                                }
 
-                                    const exerciseName = (typeof exercise.exercise === 'object' && exercise.exercise.name)
-                                        ? exercise.exercise.name
-                                        : exercise.exercise;
-                                    
-                                    const row = document.createElement("tr");
-                                    row.innerHTML = `
-                                        <td>${exerciseName}</td>
-                                        <td>${exercise.sets}</td>
-                                        <td>${exercise.weight} kg</td>
-                                        <td>${exercise.reps}</td>
-                                    `;
-                                    tbody.appendChild(row);
+                                const exerciseName = (typeof exercise.exercise === 'object' && exercise.exercise.name)
+                                    ? exercise.exercise.name
+                                    : exercise.exercise;
+                                
+                                const row = document.createElement("tr");
+                                row.innerHTML = `
+                                    <td>${exerciseName}</td>
+                                    <td>${exercise.sets}</td>
+                                    <td>${exercise.weight} kg</td>
+                                    <td>${exercise.reps}</td>
+                                    <td>
+                                        <button class="delete-exercise-btn" data-routine-id="${routine.id}" data-index="${index}">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash-2"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
+                                        </button>
+                                    </td>
+                                `;
+                                tbody.appendChild(row);
+                            });
+                            table.appendChild(tbody);
+                            exercisesList.appendChild(table);
+                            tbody.querySelectorAll(".delete-exercise-btn").forEach(btn => {
+                                btn.addEventListener("click", () => {
+                                    const routineId = btn.getAttribute("data-routine-id");
+                                    const exerciseIndex = btn.getAttribute("data-index");
+                                    showConfirmationDialog(`Jeste li sigurni da želite obrisati ovu vježbu?`, () => {
+                                        deleteExercise(routineId, exerciseIndex);
+                                    });
                                 });
-                                table.appendChild(tbody);
-                                exercisesList.appendChild(table);
+                            });
                         } else {
                             exercisesList.innerHTML = "<p>Nema dodanih vježbi.</p>";
                         }
@@ -373,6 +440,14 @@
                     alert('Nije moguće učitati vježbe.');
                 }
             }
+
+            function showConfirmationDialog(message, callback) {
+                if (confirm(message)) {
+                    callback();
+                }
+            }
+
+            
 
             loadExercises();
             loadUserRoutines();

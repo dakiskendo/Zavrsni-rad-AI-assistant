@@ -135,14 +135,14 @@
 
                     const aiData = await aiRes.json();
 
-                    function convertMarkdownToHtml(text) {
+                    function convertAIText(text) {
                         let html = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
                         html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
                         html = html.replace(/\n/g, '<br>');
                         return html;
                     }
 
-                    const formatAnswer = convertMarkdownToHtml(aiData.answer);
+                    const formatAnswer = convertAIText(aiData.answer);
             
                     const aiMessageDiv = document.createElement('div');
                     aiMessageDiv.className = 'message ai';

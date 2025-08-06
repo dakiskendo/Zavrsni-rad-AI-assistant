@@ -335,4 +335,89 @@ router.put('/:id/routines/:routineId', (req, res) => {
     });
 });
 
+router.delete('/:id/routines/:routineId/remove-exercise/:exerciseIndex', (req, res) => {
+    const userId = req.params.id;
+    const routineId = req.params.routineId;
+    const exerciseIndex = parseInt(req.params.exerciseIndex);
+
+    fs.readFile(routinesPath, 'utf8', (err, data) => {
+        if (err) {
+            console.error("Greška pri čitanju rutina:", err);
+            return res.status(500).json({ error: 'Greška na serveru.' });
+        }
+        
+        let allRoutines = [];
+        try {
+            allRoutines = JSON.parse(data);
+        } catch (parseErr) {
+            console.error("Greška pri parsiranju rutina:", parseErr);
+            return res.status(500).json({ error: 'Greška na serveru.' });
+        }
+
+        const userRoutines = allRoutines.find(u => String(u.userId) === String(userId));
+        if (!userRoutines) {
+            return res.status(404).json({ error: 'Korisnik nije pronađen.' });
+        }
+
+        const routine = userRoutines.routines.find(r => String(r.id) === String(routineId));
+        if (!routine) {
+            return res.status(404).json({ error: 'Rutina nije pronađena.' });
+        }
+
+        if (exerciseIndex < 0 || exerciseIndex >= routine.exercises.length) {
+            return res.status(404).json({ error: 'Vježba nije pronađena.' });
+        }
+
+        routine.exercises.splice(exerciseIndex, 1);
+
+        fs.writeFile(routinesPath, JSON.stringify(allRoutines, null, 2), (writeErr) => {
+            if (writeErr) {
+                console.error("Greška pri spremanju ažurirane rutine:", writeErr);
+                return res.status(500).json({ error: 'Greška pri spremanju podataka.' });
+            }
+            res.json({ message: 'Vježba uspješno obrisana.' });
+        });
+    });
+});
+
+router.delete('/:id/routines/:routineId', (req, res) => {
+    const userId = req.params.id;
+    const routineId = req.params.routineId;
+
+    fs.readFile(routinesPath, 'utf8', (err, data) => {
+        if (err) {
+            console.error("Greška pri čitanju rutina:", err);
+            return res.status(500).json({ error: 'Greška na serveru.' });
+        }
+
+        let allRoutines = [];
+        try {
+            allRoutines = JSON.parse(data);
+        } catch (parseErr) {
+            console.error("Greška pri parsiranju rutina:", parseErr);
+            return res.status(500).json({ error: 'Greška na serveru.' });
+        }
+
+        const userIndex = allRoutines.findIndex(u => String(u.userId) === String(userId));
+        if (userIndex === -1) {
+            return res.status(404).json({ error: 'Korisnik nije pronađen.' });
+        }
+
+        const routineIndex = allRoutines[userIndex].routines.findIndex(r => String(r.id) === String(routineId));
+        if (routineIndex === -1) {
+            return res.status(404).json({ error: 'Rutina nije pronađena.' });
+        }
+
+        allRoutines[userIndex].routines.splice(routineIndex, 1);
+
+        fs.writeFile(routinesPath, JSON.stringify(allRoutines, null, 2), (writeErr) => {
+            if (writeErr) {
+                console.error("Greška pri spremanju ažurirane rutine:", writeErr);
+                return res.status(500).json({ error: 'Greška pri spremanju podataka.' });
+            }
+            res.json({ message: 'Rutina uspješno obrisana.' });
+        });
+    });
+});
+
 module.exports = router;

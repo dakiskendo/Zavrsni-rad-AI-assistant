@@ -107,67 +107,6 @@
   },
   {
     "userId": "1754320142074",
-    "routines": [
-      {
-        "id": 1754320323253,
-        "name": "Push",
-        "exercises": [
-          {
-            "exercise": "Bench Press",
-            "weight": 110,
-            "reps": 6,
-            "sets": 4
-          },
-          {
-            "exercise": "Smith Machine Incline Bench Press",
-            "weight": 90,
-            "reps": 12,
-            "sets": 3
-          },
-          {
-            "exercise": "Triceps Pushdowns",
-            "weight": 100,
-            "reps": 13,
-            "sets": 4
-          },
-          {
-            "exercise": "Overhead Triceps Extensions",
-            "weight": 110,
-            "reps": 13,
-            "sets": 4
-          }
-        ]
-      },
-      {
-        "id": 1754320404204,
-        "name": "Pull",
-        "exercises": [
-          {
-            "exercise": "Pull-Ups",
-            "weight": 104,
-            "reps": 15,
-            "sets": 4
-          }
-        ]
-      },
-      {
-        "id": 1754320426226,
-        "name": "Legs",
-        "exercises": [
-          {
-            "exercise": "Squat",
-            "weight": 150,
-            "reps": 3,
-            "sets": 4
-          },
-          {
-            "exercise": "Laying Hamstring Curls",
-            "weight": 70,
-            "reps": 12,
-            "sets": 4
-          }
-        ]
-      }
-    ]
+    "routines": []
   }
 ]
